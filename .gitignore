@@ -1,0 +1,7 @@
+RAG/__pycache__/
+__pycache__/
+RAG/.DS_Store
+.DS_Store
+RAG/.env
+RAG/data/pdf/
+RAG/data/hwp/
