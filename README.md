@@ -23,7 +23,7 @@ erDiagram
         string chatTitle
         string messageId
         string senderType
-        string messageContent
-        string messageSource
+        text messageContent
+        text messageSource
     }
 ```
