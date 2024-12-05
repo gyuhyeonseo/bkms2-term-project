@@ -20,8 +20,8 @@ erDiagram
     MESSAGE {
         string sessionId
         string chatId
+        string chatTitle
         string messageId
-        string messageTitle
         string senderType
         string messageContent
         string messageSource
