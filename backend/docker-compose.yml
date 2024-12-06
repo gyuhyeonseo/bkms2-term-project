@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000" # FastAPI의 외부 접근 포트
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/chatdb
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=${OPENAI_MODEL}
+    depends_on:
+      - db # backend는 db 서비스가 준비될 때까지 기다림
+
+  db:
+    image: postgres:15 # PostgreSQL 최신 버전 사용
+    container_name: postgres_chat
+    ports:
+      - "5432:5432" # PostgreSQL의 외부 접근 포트
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: chatdb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # PostgreSQL 데이터가 저장될 위치
+
+volumes:
+  postgres_data:
