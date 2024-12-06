@@ -1,0 +1,46 @@
+@use './variables' as vars;
+
+.chat-turn {
+  padding: 16px;
+  width: 100%;
+  
+  h6 {
+    font-size: 1.1rem;
+  }
+
+  .section {
+    margin-bottom: 24px;
+  }
+
+  .sub-header {
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+
+  }
+
+  .reference-box {
+    padding: 16px;
+    border: 1px solid vars.$color-dark;
+    border-radius: 8px;
+    text-align: center;
+    background-color: vars.$color-light;
+
+    a {
+      display: inline-block;
+      margin-top: 8px;
+      color: vars.$text-link;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .message-box {
+    padding: 12px;
+    border-radius: 8px;
+    background-color: vars.$color-neutral;
+    line-height: 1.5;
+  }
+}
