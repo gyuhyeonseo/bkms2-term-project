@@ -11,10 +11,10 @@ class ChatObject(BaseModel):
 class MessageObject(BaseModel):
     sessionId: str
     chatId: str
-    chatTitle: str
+    chatTitle: str #sidebar preview
     messageId: str
-    senderType: str
-    messageContent: str
+    messageTitle: str # user query
+    messageContent: str # assistant answer
     sources: Optional[List[dict]]
     createdTime: datetime
 

@@ -37,8 +37,8 @@ async def create_chat(
     
     chat_id = utils.generate_chat_id(sessionId, db) #{session_id}-{ascending number}
     curr_time = datetime.now().isoformat()
-    user_message_id, assist_message_id = utils.generate_message_id(sessionId, chat_id, db) #{session_id}-{chat_id}-{ascending number} 형식
-    message_content, message_title = llm.call_openai(query) 
+    message_id = utils.generate_message_id(sessionId, chat_id, db) #{session_id}-{chat_id}-{ascending number} 형식
+    message_content, chat_title = llm.call_openai(query) 
     message_content = utils.clean_markdown_text(message_content)
     
     # 트랜잭션 처리
@@ -46,7 +46,7 @@ async def create_chat(
         new_chat = Chat (
             session_id = sessionId,
             chat_id = chat_id,
-            chat_title = message_title, # openai 응답 받은후에 정해짐. 
+            chat_title = chat_title, # openai 응답 받은후에 정해짐. 
             created_time = curr_time,
             last_updated_time = curr_time
         )
@@ -55,24 +55,13 @@ async def create_chat(
         new_user_message = Message(
             session_id=sessionId,
             chat_id=chat_id,
-            chat_title=message_title,
-            message_id=user_message_id, 
-            sender_type="user",
-            message_content=query,
-            message_source=""
-        )
-        db.add(new_user_message)
-
-        new_assistant_message = Message(
-            session_id=sessionId,
-            chat_id=chat_id,
-            chat_title=message_title,
-            message_id=assist_message_id, 
-            sender_type="assistant",
+            chat_title=chat_title,
+            message_id=message_id, 
+            message_title=query, 
             message_content=message_content,
             message_source=""
         )
-        db.add(new_assistant_message)
+        db.add(new_user_message)
 
         db.commit()
 
@@ -80,9 +69,9 @@ async def create_chat(
         return {
             "sessionId": sessionId,
             "chatId": chat_id,
-            "chatTitle": message_title,
-            "messageId": assist_message_id,
-            "senderType": "assistant",
+            "chatTitle": chat_title,
+            "messageId": message_id,
+            "messageTitle": query,
             "messageContent": message_content,
             "sources": [],
             "createdTime": curr_time
@@ -109,7 +98,7 @@ async def submit_followup_query(
 
     curr_time = datetime.now().isoformat()
     chat_title = chat.chat_title
-    user_message_id, assist_message_id = utils.generate_message_id(sessionId, chatId, db) #{session_id}-{chat_id}-{ascending number} 형식
+    message_id = utils.generate_message_id(sessionId, chatId, db) #{session_id}-{chat_id}-{ascending number} 형식
     message_content, _ = llm.call_openai(query) 
     message_content = utils.clean_markdown_text(message_content)
     
@@ -119,33 +108,19 @@ async def submit_followup_query(
             session_id=sessionId,
             chat_id=chatId,
             chat_title=chat_title,
-            message_id=user_message_id, 
-            sender_type="user",
+            message_id=message_id, 
             message_content=query,
             message_source=""
         )
         db.add(new_user_message)
-
-        new_assistant_message = Message(
-            session_id=sessionId,
-            chat_id=chatId,
-            chat_title=chat_title,
-            message_id=assist_message_id, 
-            sender_type="assistant",
-            message_content=message_content,
-            message_source=""
-        )
-        db.add(new_assistant_message)
-
-        db.commit()
 
         # 성공한 경우 message 반환
         return {
             "sessionId": sessionId,
             "chatId": chatId,
             "chatTitle": chat_title,
-            "messageId": assist_message_id,
-            "senderType": "assistant",
+            "messageId": message_id,
+            "mesasgeTitle": query,
             "messageContent": message_content,
             "sources": [],
             "createdTime": curr_time
