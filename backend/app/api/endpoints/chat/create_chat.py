@@ -109,7 +109,8 @@ async def submit_followup_query(
             chat_id=chatId,
             chat_title=chat_title,
             message_id=message_id, 
-            message_content=query,
+            message_title=query,
+            message_content=message_content,
             message_source=""
         )
         db.add(new_user_message)
@@ -120,7 +121,7 @@ async def submit_followup_query(
             "chatId": chatId,
             "chatTitle": chat_title,
             "messageId": message_id,
-            "mesasgeTitle": query,
+            "messageTitle": query,
             "messageContent": message_content,
             "sources": [],
             "createdTime": curr_time
