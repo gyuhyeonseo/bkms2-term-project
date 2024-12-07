@@ -23,7 +23,7 @@ class Message(Base):
     chat_id = Column(String, nullable=False)
     chat_title = Column(String, nullable=False)
     message_id = Column(String, primary_key =True)
-    sender_type = Column(String, nullable=False)
+    message_title = Column(String, nullable=False)
     # created_time = Column(DateTime, nullable=False) # 필요할지 확인
     message_content = Column(Text, nullable=False)
     message_source = Column(Text)

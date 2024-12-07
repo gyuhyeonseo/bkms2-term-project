@@ -33,15 +33,12 @@ def generate_message_id(sessionId: str, chatId:str, db:Session):
     if last_message:
         last_message_number = int(last_message.message_id.split("-")[-1])
         new_message_number_for_user = str(last_message_number + 1).zfill(5)
-        new_message_number_for_assist = str(last_message_number + 2).zfill(5)
     else:
         new_message_number_for_user = "00001"
-        new_message_number_for_assist = "00002"
 
-    user_message_id = f"{chatId}-{new_message_number_for_user}"
-    assist_message_id = f"{chatId}-{new_message_number_for_assist}"
+    message_id = f"{chatId}-{new_message_number_for_user}"
 
-    return user_message_id, assist_message_id
+    return message_id
 
 # return clean markdown text
 def clean_markdown_text(text: str) -> str:
