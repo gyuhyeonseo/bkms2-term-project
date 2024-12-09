@@ -38,7 +38,7 @@ async def create_chat(
     chat_id = utils.generate_chat_id(sessionId, db) #{session_id}-{ascending number}
     curr_time = datetime.now().isoformat()
     message_id = utils.generate_message_id(sessionId, chat_id, db) #{session_id}-{chat_id}-{ascending number} 형식
-    message_content, chat_title = llm.call_openai(query) 
+    message_content, chat_title, link_list, byte_file_list = llm.call_openai(query, True) 
     message_content = utils.clean_markdown_text(message_content)
     
     # 트랜잭션 처리
@@ -59,7 +59,8 @@ async def create_chat(
             message_id=message_id, 
             message_title=query, 
             message_content=message_content,
-            message_source=""
+            message_links=link_list,  # Link list 추가
+            message_files=byte_file_list  # Byte file list 추가
         )
         db.add(new_user_message)
 
@@ -73,7 +74,8 @@ async def create_chat(
             "messageId": message_id,
             "messageTitle": query,
             "messageContent": message_content,
-            "sources": [],
+            "messageLinks": link_list,
+            "messageFiles": byte_file_list,
             "createdTime": curr_time
         }
 
@@ -99,7 +101,7 @@ async def submit_followup_query(
     curr_time = datetime.now().isoformat()
     chat_title = chat.chat_title
     message_id = utils.generate_message_id(sessionId, chatId, db) #{session_id}-{chat_id}-{ascending number} 형식
-    message_content, _ = llm.call_openai(query) 
+    message_content, _ , link_list, byte_file_list= llm.call_openai(query, False) 
     message_content = utils.clean_markdown_text(message_content)
     
 
@@ -111,7 +113,8 @@ async def submit_followup_query(
             message_id=message_id, 
             message_title=query,
             message_content=message_content,
-            message_source=""
+            message_links=link_list,  # Link list 추가
+            message_files=byte_file_list  # Byte file list 추가
         )
         db.add(new_user_message)
 
@@ -123,7 +126,8 @@ async def submit_followup_query(
             "messageId": message_id,
             "messageTitle": query,
             "messageContent": message_content,
-            "sources": [],
+            "messageLinks": link_list,
+            "messageFiles": byte_file_list,
             "createdTime": curr_time
         }
 

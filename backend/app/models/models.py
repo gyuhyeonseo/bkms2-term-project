@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Text
+from sqlalchemy import Column, String, Text, JSON
 from app.core.database import Base
 
 
@@ -26,5 +26,6 @@ class Message(Base):
     message_title = Column(String, nullable=False)
     # created_time = Column(DateTime, nullable=False) # 필요할지 확인
     message_content = Column(Text, nullable=False)
-    message_source = Column(Text)
+    message_links = Column(JSON, nullable=True)  # Link list 저장
+    message_files = Column(JSON, nullable=True)  # Byte file list 저장
 
