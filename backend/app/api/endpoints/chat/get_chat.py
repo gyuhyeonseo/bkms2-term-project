@@ -36,7 +36,8 @@ async def get_chat_history(
             "messageId": msg.message_id,
             "messageTitle":msg.message_title, # user query
             "messageContent": msg.message_content, # assistant answer
-            "sources": msg.message_source
+            "messageLinks": msg.link_list,
+            "messageFiles": msg.byte_file_list,
         }
         for msg in messages
     ]

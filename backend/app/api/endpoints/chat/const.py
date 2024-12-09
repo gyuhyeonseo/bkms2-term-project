@@ -14,3 +14,16 @@ title_prompt = """다음 내용에 대한 요약 (preview) 제목을 30자내로
 {content}
 [요약]
 """
+
+prompt_template = """
+# Previous Context:
+{context}
+
+# Question: {query}
+
+# Relevant Passages:
+{passages}
+
+# Based on the context and passages above, generate an answer to the question. Explicitly mention the 'data_source'.
+ex) (출처: document_name.hwp)
+"""

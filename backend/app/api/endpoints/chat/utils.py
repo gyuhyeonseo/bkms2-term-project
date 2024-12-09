@@ -49,3 +49,10 @@ def clean_markdown_text(text: str) -> str:
     text = text.strip()
     return text
 
+def generate_markdown(data):
+    markdown = ""
+    for key, value in data.items():
+        markdown += f"### {key}\n\n"
+        for sub_key, sub_value in value.items():
+            markdown += f"**{sub_key.capitalize()}**\n\n{sub_value}\n\n"
+    return markdown

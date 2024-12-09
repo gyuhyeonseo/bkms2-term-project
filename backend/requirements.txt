@@ -4,3 +4,17 @@ sqlalchemy
 psycopg2-binary
 python-dotenv
 openai
+
+chromadb
+langchain
+langchain_openai
+langchain-text-splitters
+langchain_chroma
+playwright
+langchain_community
+unstructured
+unstructured[local-inference]
+html2text
+pypdf
+pandas
+
