@@ -117,6 +117,7 @@ async def submit_followup_query(
             message_files=byte_file_list  # Byte file list 추가
         )
         db.add(new_user_message)
+        db.commit()
 
         # 성공한 경우 message 반환
         return {
