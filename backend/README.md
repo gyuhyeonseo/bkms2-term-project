@@ -22,8 +22,9 @@ erDiagram
         string chatId
         string chatTitle
         string messageId
-        string senderType
+        string messageTitle
         string messageContent
-        string messageSource
+        json messageLinks
+        json messageFiles
     }
 ```
