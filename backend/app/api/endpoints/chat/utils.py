@@ -53,6 +53,9 @@ def generate_markdown(data):
     markdown = ""
     for key, value in data.items():
         markdown += f"### {key}\n\n"
-        for sub_key, sub_value in value.items():
-            markdown += f"**{sub_key.capitalize()}**\n\n{sub_value}\n\n"
+        if isinstance(value, dict):  # value가 딕셔너리인 경우
+            for sub_key, sub_value in value.items():
+                markdown += f"**{sub_key.capitalize()}**\n\n{sub_value}\n\n"
+        else:  # value가 문자열이나 다른 타입인 경우
+            markdown += f"{value}\n\n"
     return markdown
