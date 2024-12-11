@@ -1,16 +1,25 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
-const useChatStore = create((set) => ({
-  sessionId: null,
-  setSessionId: (sessionId) => set(() => ({ sessionId })),
-  chatHistory: [], // chatList를 저장
-  setChatHistory: (chatList) => set(() => ({ chatHistory: chatList })), // chatList를 업데이트
-  addChat: (chat) => set((state) => ({ chatHistory: [...state.chatHistory, chat] })), // 새로운 채팅 추가
-  removeChat: (chatId) =>
-    set((state) => ({
-      chatHistory: state.chatHistory.filter((chat) => chat.chatId !== chatId),
-    })), // 특정 채팅 제거
-  clearChats: () => set(() => ({ chatHistory: [] })), // 모든 채팅 삭제
-}));
+const useChatStore = create(
+  persist(
+    (set) => ({
+      sessionId: null,
+      setSessionId: (sessionId) => set(() => ({ sessionId })),
+      chatList: [],
+      setChatList: (chatList) => set(() => ({ chatList })),
+      addChat: (chat) => set((state) => ({ chatList: [chat, ...state.chatList] })),
+      removeChat: (chatId) =>
+        set((state) => ({
+          chatList: state.chatList.filter((chat) => chat.chatId !== chatId),
+        })),
+      clearChats: () => set(() => ({ chatList: [] })),
+    }),
+    {
+      name: 'chat-storage',
+      getStorage: () => localStorage,
+    }
+  )
+);
 
 export default useChatStore;

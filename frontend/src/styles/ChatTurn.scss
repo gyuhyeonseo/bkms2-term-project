@@ -21,26 +21,36 @@
 
   .reference-box {
     padding: 16px;
-    border: 1px solid vars.$color-dark;
     border-radius: 8px;
     text-align: center;
-    background-color: vars.$color-light;
-
-    a {
-      display: inline-block;
-      margin-top: 8px;
-      color: vars.$text-link;
-
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-  }
-
-  .message-box {
-    padding: 12px;
-    border-radius: 8px;
     background-color: vars.$color-neutral;
-    line-height: 1.5;
+
+    &:hover{
+      cursor: pointer;
+      background-color: vars.$color-dark;
+      transition: background-color 0.3s ease;
+    }
+    
   }
+
+  .message-content-box {
+    width: 100%;
+    padding: 12px 20px;
+    border-radius: 8px;
+    border: 2px solid vars.$color-neutral;
+    line-height: 1.5;
+    overflow-y: auto;
+    overflow-x: hidden; /* 가로 스크롤 방지 */
+    box-sizing: border-box; 
+  }
+  
+  .markdown-content {
+    max-width: 100%;
+    word-wrap: break-word;
+    word-break: break-word;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    box-sizing: border-box;
+  }
+  
 }

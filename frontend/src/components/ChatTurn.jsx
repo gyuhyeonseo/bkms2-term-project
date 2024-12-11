@@ -1,17 +1,21 @@
 import React from 'react';
-import { Box, Divider, Typography, Grid2, Link, Stack } from '@mui/material';
+import { Box, Divider, Typography, Stack } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import CollectionsBookmarkOutlinedIcon from '@mui/icons-material/CollectionsBookmarkOutlined';
 import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlined';
 import Markdown from 'markdown-to-jsx';
 import '../styles/ChatTurn.scss';
 
+const ChatTurn = ({ messageTitle, messageContent, messageLinks }) => {
 
-const ChatTurn = ({ title, sources, message }) => {
+  // Replace # with ### in messageContent
+  const formattedMessageContent = messageContent.replace(/^#+/gm, '### ');
+
   return (
     <Box className="chat-turn">
       <Box className="section">
         <Typography variant="h5" gutterBottom>
-          {title}
+          {messageTitle}
         </Typography>
       </Box>
 
@@ -22,26 +26,19 @@ const ChatTurn = ({ title, sources, message }) => {
             출처
           </Typography>
         </Stack>
-        {sources.length > 0 ? (
-          <Grid2 container spacing={2}>
-            {sources.map((link, index) => (
-              <Grid2 item xs={12} sm={4} key={index}>
-                <Box className="reference-box">
-                  <Link href={link.url} target="_blank" rel="noopener" underline="hover">
-                    Visit URL
-                  </Link>
-                  <br />
-                  <Link
-                    href={`data:application/octet-stream;charset=utf-8;base64,${link.file}`}
-                    download={link.fileName}
-                    underline="hover"
-                  >
-                    {link.fileName}
-                  </Link>
+        {messageLinks.length > 0 ? (
+          <Grid container spacing={2}>
+            {messageLinks.map((obj, index) => (
+              <Grid xs={12} sm={4} key={index}>
+                <Box
+                  className="reference-box"
+                  onClick={() => window.open(obj.link, '_blank', 'noopener noreferrer')}
+                >
+                  <Typography variant="body2">Reference URL</Typography>
                 </Box>
-              </Grid2>
+              </Grid>
             ))}
-          </Grid2>
+          </Grid>
         ) : (
           <Typography variant="body2" color="textSecondary">
             출처가 없습니다.
@@ -56,8 +53,8 @@ const ChatTurn = ({ title, sources, message }) => {
             답변
           </Typography>
         </Stack>
-        <Box className="message-box">
-          <Markdown>{message}</Markdown>
+        <Box className="message-content-box">
+          <Markdown className="markdown-content">{formattedMessageContent}</Markdown>
         </Box>
       </Box>
 

@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, TextField, Typography, IconButton, CircularProgress } from '@mui/material';
-import SendIcon from '@mui/icons-material/Send';
-import { signIn } from '../apis/api'; // API 호출 함수
-import useChatStore from '../stores/useChatStore'; // zustand 스토어
-import '../styles/Login.scss';
+import LoginIcon from '@mui/icons-material/Login';
+import { signinSession } from '../apis/api';
+import useChatStore from '../stores/useChatStore'; 
+import '../styles/Signin.scss';
 
-const Login = () => {
+const Signin = () => {
   const [sessionId, setSessionIdInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -14,7 +14,7 @@ const Login = () => {
   const textFieldRef = useRef(null);
 
   const setSessionId = useChatStore((state) => state.setSessionId);
-  const setChatHistory = useChatStore((state) => state.setChatHistory);
+  const setChatList = useChatStore((state) => state.setChatList);
 
   const sessionIdRegex = /^[a-zA-Z0-9\-]{8,16}$/;
 
@@ -22,7 +22,12 @@ const Login = () => {
     if (textFieldRef.current) {
       textFieldRef.current.focus();
     }
-  }, []);
+
+    const storedSessionId = localStorage.getItem('sessionId');
+    if (storedSessionId) {
+      navigate('/');
+    }
+  }, [navigate]);
 
   const handleLogin = async () => {
     if (sessionId.trim() === '') {
@@ -33,24 +38,23 @@ const Login = () => {
       setError('Session ID는 8~16자 사이의 영어 대소문자, 숫자, "-"만 포함해야 합니다.');
       return;
     }
-  
+
     setLoading(true);
     setError(null);
-  
+
     try {
-      const data = await signIn(sessionId); // API 호출
-      setSessionId(data.sessionId); // zustand 스토어에 sessionId 설정
-      setChatHistory(data.chatList); // zustand에 chatList 설정
-      localStorage.setItem('sessionId', data.sessionId); // 로컬스토리지에 저장
-      navigate('/'); // 홈 화면으로 이동
+      const data = await signinSession(sessionId);
+      setSessionId(data.sessionId);
+      setChatList(data.chatList);
+      localStorage.setItem('sessionId', data.sessionId);
+      navigate('/');
     } catch (err) {
       console.error(err);
-      setError(err.message || '로그인 요청 중 오류가 발생했습니다.'); // 에러 메시지 설정
+      setError(err.message || '로그인 요청 중 오류가 발생했습니다.');
     } finally {
       setLoading(false);
     }
   };
-  
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
@@ -61,7 +65,7 @@ const Login = () => {
   return (
     <Box className="login-container">
       <Box className="login-box">
-        <Typography variant="h5" className="login-title">
+        <Typography variant="h6" sx={{marginBottom:'10px'}}>
           Session ID를 입력하세요
         </Typography>
         <Box className="login-input-box">
@@ -71,7 +75,10 @@ const Login = () => {
             fullWidth
             placeholder="Session ID"
             value={sessionId}
-            onChange={(e) => setSessionIdInput(e.target.value)}
+            onChange={(e) => {
+              setSessionIdInput(e.target.value);
+              setError(null);
+            }}
             onKeyDown={handleKeyPress}
             className="login-textfield"
             error={!!error}
@@ -82,7 +89,7 @@ const Login = () => {
             disabled={loading || sessionId.trim() === ''}
             className="login-send-button"
           >
-            {loading ? <CircularProgress size={24} /> : <SendIcon />}
+            {loading ? <CircularProgress size={24} color="success" /> : <LoginIcon />}
           </IconButton>
         </Box>
       </Box>
@@ -90,4 +97,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signin;

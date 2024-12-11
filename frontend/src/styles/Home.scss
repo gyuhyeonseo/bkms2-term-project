@@ -23,11 +23,11 @@
     flex-direction: column;
     border: none;
     border-radius: 16px;
-    background-color: vars.$color-neutral;
+    border: 1px solid vars.$color-dark;
 
     .home-send-icon-wrapper {
         display: flex;
-        justify-content: flex-end; // 우측 정렬
+        justify-content: flex-end;
     }
 }
 

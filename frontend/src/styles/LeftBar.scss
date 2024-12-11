@@ -1,6 +1,5 @@
 @use './variables' as vars;
 
-$hover-color: #e0e0e0;
 $border-radius: 8px;
 
 .left-panel {
@@ -18,27 +17,38 @@ $border-radius: 8px;
   padding: 10px 20px;
   border-radius: $border-radius;
   text-transform: none;
-  margin-bottom: 20px;
   cursor: pointer;
 }
 
+.confirm-delete-btn {
+  background-color: #f13d44 !important;
+  color: vars.$color-light !important;
+
+
+  &:hover {
+    background-color: darken(#f13d44, 20%) !important;
+    color: vars.$color-light !important;
+  }
+}
+
 .new-chat-btn {
-  background-color: vars.$text-link !important; /* 기본 배경색 강제 적용 */
+  margin-bottom: 20px;
+  background-color: vars.$text-link !important;
   color: vars.$color-light !important;
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: lighten(vars.$text-link, 10%) !important; /* hover 상태에서 더 진하게 */
+    background-color: lighten(vars.$text-link, 10%) !important;
   }
 }
 
 .clear-btn {
-  background-color: vars.$color-dark !important; /* 기본 배경색 강제 적용 */
-  color: darken(vars.$color-dark, 50%) !important;
-  transition: background-color 0.3s ease;
+  margin-top: 20px;
+  color: #f13d44 !important;
 
   &:hover {
-    background-color: darken(vars.$color-dark, 10%) !important; /* hover 상태에서 더 진하게 */
+    background-color: #f13d44 !important;
+    color: vars.$color-light !important;
   }
 }
 
@@ -59,10 +69,10 @@ $border-radius: 8px;
   cursor: pointer;
 
   &:hover {
-    background-color: $hover-color;
+    background-color: vars.$color-dark;
   }
 
-  .chat-name {
+  .chat-title {
     font-size: 14px;
     font-weight: bold;
     white-space: nowrap;
@@ -74,13 +84,11 @@ $border-radius: 8px;
     color: #888;
   }
 
-  .edit-delete-buttons {
+  .delete-icon {
     visibility: hidden;
-    display: flex;
-    gap: 10px;
   }
 
-  &:hover .edit-delete-buttons {
+  &:hover .delete-icon {
     visibility: visible;
   }
 }
@@ -88,4 +96,3 @@ $border-radius: 8px;
 .active-chat-item {
   background-color: vars.$color-dark !important;
 }
-

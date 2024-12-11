@@ -2,29 +2,27 @@ import axios from 'axios';
 
 // Axios 인스턴스 생성
 const apiClient = axios.create({
-  baseURL: 'https://virtserver.swaggerhub.com/kyongshikl/BKMS2/1.0.0/', // 공통 베이스 URL
+  baseURL: 'http://98.82.16.129', // 공통 베이스 URL
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
 // session으로 로그인
-export const signIn = async (sessionId) => {
+export const signinSession = async (sessionId) => {
   try {
     const response = await apiClient.put(`/session/${sessionId}`);
-    return response.data; // 서버 응답 데이터 반환
+    return response.data;
   } catch (error) {
     console.error('Error during signIn:', error.response || error);
     throw error;
   }
 };
 
-// Home화면에서 채팅 시작
+// Home 화면에서 채팅 시작
 export const createChat = async (sessionId, query) => {
   try {
-    const response = await apiClient.post(`/session/${sessionId}/chats`, {
-      query: query,
-    });
+    const response = await apiClient.post(`/session/${sessionId}/chats`, query);
     return response.data;
   } catch (error) {
     console.error('Error during createChat:', error.response?.data || error);
@@ -32,16 +30,14 @@ export const createChat = async (sessionId, query) => {
   }
 };
 
-// 특정 chat에서 후속질문
-export const sendFollowUpMessage = async (sessionId, chatId, query) => {
+// 팔로업 질문
+export const submitFollowupQuery = async (sessionId, chatId, query) => {
   try {
-    const response = await apiClient.post(`/session/${sessionId}/chats/${chatId}`, {
-      query: query,
-    });
-    return response.data; // 서버 응답 데이터 반환
+    const response = await apiClient.post(`/session/${sessionId}/chats/${chatId}`,query);
+    return response.data;
   } catch (error) {
     console.error('Error during sendFollowUpMessage:', error.response?.data || error);
-    throw error.response?.data || { error: 'Unknown error occurred' }; // 에러 응답 데이터 반환
+    throw error.response?.data || { error: 'Unknown error occurred' };
   }
 };
 
@@ -49,20 +45,20 @@ export const sendFollowUpMessage = async (sessionId, chatId, query) => {
 export const getChatHistory = async (sessionId, chatId) => {
   try {
     const response = await apiClient.get(`/session/${sessionId}/chats/${chatId}`);
-    return response.data; // 서버 응답 데이터 반환
+    return response.data;
   } catch (error) {
     console.error('Error during getChatHistory:', error.response?.data || error);
-    throw error.response?.data || { error: 'Unknown error occurred' }; // 에러 응답 데이터 반환
+    throw error.response?.data || { error: 'Unknown error occurred' };
   }
 };
 
 export const deleteChat = async (sessionId, chatId) => {
   try {
     const response = await apiClient.delete(`/session/${sessionId}/chats/${chatId}`);
-    return response.data; // 서버 응답 데이터 반환
+    return response.data;
   } catch (error) {
     console.error('Error during deleteChat:', error.response?.data || error);
-    throw error.response?.data || { error: 'Unknown error occurred' }; // 에러 응답 데이터 반환
+    throw error.response?.data || { error: 'Unknown error occurred' };
   }
 };
 

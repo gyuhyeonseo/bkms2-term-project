@@ -1,46 +1,53 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import LeftBar from './components/LeftBar'; // 좌측 패널 컴포넌트
-import Login from './views/Login';
+import { ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import theme from "./styles/theme";
+
+import LeftBar from './components/LeftBar';
+import Signin from './views/Signin';
 import Home from './views/Home';
 import Chat from './views/Chat';
-import useChatStore from './stores/useChatStore'; // zustand 스토어
+import useChatStore from './stores/useChatStore';
 
 const App = () => {
-  const sessionId = useChatStore((state) => state.sessionId); // zustand에서 sessionId 가져오기
+  const sessionId = useChatStore((state) => state.sessionId);
   const setSessionId = useChatStore((state) => state.setSessionId);
 
   useEffect(() => {
     const storedSessionId = localStorage.getItem('sessionId');
     if (storedSessionId) {
-      setSessionId(storedSessionId); // 로컬스토리지 세션을 zustand에 설정
+      setSessionId(storedSessionId);
     }
   }, [setSessionId]);
 
-  const isLoggedIn = !!sessionId; // sessionId가 존재하면 로그인 상태
+  const isLoggedIn = !!sessionId;
 
   return (
-    <Router>
-      <div style={{ display: 'flex' }}>
-        {isLoggedIn && <LeftBar />}
+    <ThemeProvider theme={theme}> 
+      <CssBaseline />
+      <Router>
+        <div style={{ display: 'flex' }}>
+          {isLoggedIn && <LeftBar />}
 
-        <Routes>
-          <Route
-            path="/login"
-            element={isLoggedIn ? <Navigate to="/" /> : <Login />}
-          />
-          <Route
-            path="/"
-            element={isLoggedIn ? <Home /> : <Navigate to="/login" />}
-          />
-          <Route
-            path="/chat/:chat_id"
-            element={isLoggedIn ? <Chat /> : <Navigate to="/login" />}
-          />
-          <Route path="*" element={<Navigate to={isLoggedIn ? "/" : "/login"} />} />
-        </Routes>
-      </div>
-    </Router>
+          <Routes>
+            <Route
+              path="/signin"
+              element={isLoggedIn ? <Navigate to="/" /> : <Signin />}
+            />
+            <Route
+              path="/"
+              element={isLoggedIn ? <Home /> : <Navigate to="/signin" />}
+            />
+            <Route
+              path="/chats/:chat_id"
+              element={isLoggedIn ? <Chat /> : <Navigate to="/signin" />}
+            />
+            <Route path="*" element={<Navigate to={isLoggedIn ? "/" : "/signin"} />} />
+          </Routes>
+        </div>
+      </Router>
+    </ThemeProvider>
   );
 };
 
