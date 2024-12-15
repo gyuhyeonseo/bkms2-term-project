@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Axios 인스턴스 생성
 const apiClient = axios.create({
-  baseURL: 'http://98.82.16.129', // 공통 베이스 URL
+  baseURL: process.env.CHATBOT_API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
