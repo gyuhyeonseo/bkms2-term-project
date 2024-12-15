@@ -1,0 +1,56 @@
+@use './variables' as vars;
+
+.chat-turn {
+  padding: 16px;
+  width: 100%;
+  
+  h6 {
+    font-size: 1.1rem;
+  }
+
+  .section {
+    margin-bottom: 24px;
+  }
+
+  .sub-header {
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+
+  }
+
+  .reference-box {
+    padding: 16px;
+    border-radius: 8px;
+    text-align: center;
+    background-color: vars.$color-neutral;
+
+    &:hover{
+      cursor: pointer;
+      background-color: vars.$color-dark;
+      transition: background-color 0.3s ease;
+    }
+    
+  }
+
+  .message-content-box {
+    width: 100%;
+    padding: 12px 20px;
+    border-radius: 8px;
+    border: 2px solid vars.$color-neutral;
+    line-height: 1.5;
+    overflow-y: auto;
+    overflow-x: hidden; /* 가로 스크롤 방지 */
+    box-sizing: border-box; 
+  }
+  
+  .markdown-content {
+    max-width: 100%;
+    word-wrap: break-word;
+    word-break: break-word;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    box-sizing: border-box;
+  }
+  
+}

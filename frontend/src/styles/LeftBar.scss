@@ -1,0 +1,98 @@
+@use './variables' as vars;
+
+$border-radius: 8px;
+
+.left-panel {
+  width: 20%;
+  height: 100vh;
+  background-color: vars.$color-neutral;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.btn {
+  padding: 10px 20px;
+  border-radius: $border-radius;
+  text-transform: none;
+  cursor: pointer;
+}
+
+.confirm-delete-btn {
+  background-color: #f13d44 !important;
+  color: vars.$color-light !important;
+
+
+  &:hover {
+    background-color: darken(#f13d44, 20%) !important;
+    color: vars.$color-light !important;
+  }
+}
+
+.new-chat-btn {
+  margin-bottom: 20px;
+  background-color: vars.$text-link !important;
+  color: vars.$color-light !important;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: lighten(vars.$text-link, 10%) !important;
+  }
+}
+
+.clear-btn {
+  margin-top: 20px;
+  color: #f13d44 !important;
+
+  &:hover {
+    background-color: #f13d44 !important;
+    color: vars.$color-light !important;
+  }
+}
+
+.chat-list {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.chat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-radius: $border-radius;
+  background-color: vars.$color-light;
+  margin-bottom: 10px;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+
+  &:hover {
+    background-color: vars.$color-dark;
+  }
+
+  .chat-title {
+    font-size: 14px;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .chat-date {
+    font-size: 10px;
+    color: #888;
+  }
+
+  .delete-icon {
+    visibility: hidden;
+  }
+
+  &:hover .delete-icon {
+    visibility: visible;
+  }
+}
+
+.active-chat-item {
+  background-color: vars.$color-dark !important;
+}

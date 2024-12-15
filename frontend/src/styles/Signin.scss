@@ -1,0 +1,54 @@
+@use './variables' as vars;
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  background-color: vars.$color-light;
+}
+
+.login-box {
+  background-color: vars.$color-neutral;
+  padding: 30px;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.login-input-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.login-textfield {
+  flex: 1;
+
+  .MuiOutlinedInput-root {
+    background-color: vars.$color-light;
+
+    &:hover fieldset {
+      border-color: vars.$text-link;
+    }
+
+    &.Mui-focused fieldset {
+      border-color: vars.$text-link;
+    }
+  }
+}
+
+.login-send-button {
+  color: vars.$text-link;
+
+  &:disabled {
+    color: vars.$color-dark;
+  }
+}
+
+.login-error {
+  margin-top: 10px;
+  color: vars.$text-link;
+}
