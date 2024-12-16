@@ -40,7 +40,10 @@ async def create_chat(
     message_id = utils.generate_message_id(sessionId, chat_id, db) #{session_id}-{chat_id}-{ascending number} 형식
     message_content, chat_title, link_list, byte_file_list = llm.call_openai(query, True) 
     message_content = utils.clean_markdown_text(message_content)
-    
+    # print(message_content)
+    # print(chat_title)
+    # print(link_list)
+
     # 트랜잭션 처리
     try:
         new_chat = Chat (

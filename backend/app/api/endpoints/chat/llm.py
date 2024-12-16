@@ -1,16 +1,25 @@
 from fastapi import  HTTPException
 from app.models.models import Chat, Message
 from app.core.config import OPENAI_API_KEY, OPENAI_MODEL
-from app.api.endpoints.chat import const
-from app.core.rag import rag_pdf
+from app.api.endpoints.chat import const, utils, rag
 from openai import OpenAI
 import chromadb
 from chromadb.utils import embedding_functions
-
 import os
 from dotenv import load_dotenv
-from app.api.endpoints.chat import utils
+
 import time
+
+from langchain_openai import OpenAIEmbeddings, ChatOpenAI
+from langchain_chroma import Chroma
+
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+
+from langchain_core.prompts import PromptTemplate
+
+from langchain_community.document_loaders import PyPDFLoader
+import chromadb
+from chromadb.utils import embedding_functions
 
 
 load_dotenv()
@@ -34,11 +43,10 @@ vectordb_collection = vectordb_client.get_collection(
 # OpenAI 호출 함수
 def call_openai(query: str, need_title:bool):
     chat_title = ""
-    
     # meta-data에 대해서 distance가 1 미만인 경우에만 바로 retrieval
     cache_start_time = time.time()
     retrieved_data_from_faq = vectordb_collection.query(query_texts=[query], n_results=1) 
-    
+
     # FAQ cache (semantic cache)
     for idx, distances in enumerate(retrieved_data_from_faq['distances']):
 
@@ -54,38 +62,44 @@ def call_openai(query: str, need_title:bool):
     # rag 
     try:
         rag_start_time = time.time()
-        # content_response = rag_pdf.execute_query(query)
-        # print(content_response)
-        # print("RAG")
-        content_response = openai_client.chat.completions.create(
-            model=OPENAI_MODEL, 
-            messages=[
-                {"role": "user", 
-                 "content": const.content_prompt.format(query=query) 
-                } 
-            ]
-        )
+        content_response = rag.execute_query(query)
+        # content_response = openai_client.chat.completions.create(
+        #     model=OPENAI_MODEL, 
+        #     messages=[
+        #         {"role": "user", 
+        #          "content": const.content_prompt.format(query=query) 
+        #         } 
+        #     ]
+        # )
         rag_end_time = time.time()
         print("RAG EXECUTION TIME: ", rag_end_time - rag_start_time)
-        
+
         # 응답에서 content 가져오기
-        message_content = content_response.choices[0].message.content
+        # message_content = content_response.choices[0].message.content
 
         # 요약 생성
+        print(content_response)
         if need_title:
-            title_response = openai_client.chat.completions.create(
-                model=OPENAI_MODEL, 
-                messages=[
-                    {"role": "user", "content": const.title_prompt.format(content=message_content)}
-                ]
-            )
-            chat_title = title_response.choices[0].message.content
+            print("title")
+            # title_response = openai_client.chat.completions.create(
+            #     model=OPENAI_MODEL, 
+            #     messages=[
+            #         {"role": "user", "content": const.title_prompt.format(content=content_response.query)}
+            #     ]
+            # )
+            # print("title", title_response)
+            # chat_title = title_response.choices[0].message.content
+            llm = ChatOpenAI(model=OPENAI_MODEL, temperature=0, openai_api_key=OPENAI_API_KEY)
+            prompt = PromptTemplate(template=const.title_prompt, input_variables=["content"])
+            chain = prompt | llm
+            response = chain.invoke({"content", content_response["query"]})
+            chat_title = response.content
         
-        
+        # print(chat_title)
     
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"OpenAI API error: {e}")
-    return message_content, chat_title, [], [] #content_response.link_objects, content_response.file_objects
+    return content_response["response"], content_response["query"], content_response["messageLinks"], content_response["messageFiles"] #, content_response.file_objects
 
 
 if __name__ == "__main__":

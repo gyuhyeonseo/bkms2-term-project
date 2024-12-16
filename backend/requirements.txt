@@ -1,20 +1,20 @@
-fastapi
-uvicorn
-sqlalchemy
-psycopg2-binary
-python-dotenv
-openai
+fastapi                  # FastAPI web framework
+uvicorn                  # ASGI server for FastAPI
+sqlalchemy               # ORM for database interactions
+psycopg2-binary          # PostgreSQL driver (ensure libpq-dev/postgresql installed)
+python-dotenv            # For environment variable management
+openai                   # OpenAI API client
 
-chromadb
-langchain
-langchain_openai
-langchain-text-splitters
-langchain_chroma
-playwright
-langchain_community
-unstructured
-unstructured[local-inference]
-html2text
-pypdf
-pandas
+chromadb                 # Chroma vector store
+langchain                # LangChain core
+langchain_openai         # LangChain OpenAI integration
+langchain-text-splitters # LangChain text splitting utilities
+langchain_chroma         # LangChain Chroma integration
+langchain_community      # LangChain community-maintained tools
 
+playwright               # Browser automation (requires `playwright install`)
+unstructured             # For document parsing
+unstructured[local-inference] # Local inference support (requires Tesseract and libmagic)
+html2text                # HTML to text conversion
+pypdf                    # PDF handling
+pandas                   # Data manipulation
